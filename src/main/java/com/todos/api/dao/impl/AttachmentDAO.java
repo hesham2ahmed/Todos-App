@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AttachmentDAO implements IAttachmentDAO {
-    private final String SELECT_ALL_ATTACHMENT = "SELECT * FROM attachment";
+    private final String SELECT_ALL_ATTACHMENT = "SELECT * FROM " + table;
+    private final String SELECT_TASK_ATTACHMENTS = "SELECT * FROM attachment INNER JOIN task_attach ta on ta.task_id = ?" ;
     private final Connection connection;
     private AttachmentDAO attachmentDAO = null;
 
@@ -32,12 +33,7 @@ public class AttachmentDAO implements IAttachmentDAO {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ATTACHMENT);
             ResultSet rs = preparedStatement.executeQuery();
-            while(rs.next()){
-                long id = rs.getLong("id");
-                String link = rs.getString("link");
-                Attachment attachment = new Attachment(id,link);
-                attachments.add(attachment);
-            }
+            attachments = getResultList(rs);
         } catch (SQLException throwables) {
             ExceptionHandle.printSQLException(throwables);
         }
@@ -45,8 +41,28 @@ public class AttachmentDAO implements IAttachmentDAO {
     }
 
     @Override
-    public List<Attachment> getTaskAttachment(long taskId) {
-        return null;
+    public List<Attachment> getTaskAttachments(long taskId) {
+        List<Attachment> attachments = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TASK_ATTACHMENTS);
+            preparedStatement.setLong(1, taskId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            attachments = getResultList(resultSet);
+        } catch (SQLException throwables) {
+            ExceptionHandle.printSQLException(throwables);
+        }
+        return attachments;
+    }
+
+    private List<Attachment> getResultList(ResultSet resultSet) throws SQLException {
+        List<Attachment> attachments = new ArrayList<>();
+        while(resultSet.next()){
+            long id = resultSet.getLong("id");
+            String link = resultSet.getString("link");
+            Attachment attachment = new Attachment(id,link);
+            attachments.add(attachment);
+        }
+        return attachments;
     }
 
 }

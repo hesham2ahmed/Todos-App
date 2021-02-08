@@ -5,6 +5,7 @@ import com.todos.api.model.Attachment;
 import java.util.List;
 
 public interface IAttachmentDAO{
+    String table = "attachment";
     List<Attachment> getAllAttachment();
-    List<Attachment> getTaskAttachment(long taskId);
+    List<Attachment> getTaskAttachments(long taskId);
 }
