@@ -9,13 +9,17 @@ public class Task {
     private String name;
     private Date created_date;
     private Date due_date;
+    private boolean done;
     private List<Attachment> attachments;
+    private long person_id;
 
-    public Task(String note, String name, Date created_date, Date due_date) {
+    public Task(long person_id,String note, String name, Date created_date, Date due_date) {
         this.note = note;
         this.name = name;
         this.created_date = created_date;
         this.due_date = due_date;
+        this.done = false;
+        this.person_id = person_id;
     }
 
     public long getId() {
@@ -68,5 +72,17 @@ public class Task {
 
     public void addAttachment(Attachment attachment){
         this.attachments.add(attachment);
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
+    }
+
+    public long getPerson_id() {
+        return person_id;
     }
 }

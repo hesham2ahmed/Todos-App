@@ -1016,50 +1016,54 @@ SELECT|sys.sys_config
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="309" parent="288" name="fk_task">
+    <column id="309" parent="288" name="is_done">
+      <Position>7</Position>
+      <DataType>tinyint(1)|0s</DataType>
+    </column>
+    <index id="310" parent="288" name="fk_task">
       <ColNames>person_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="310" parent="288" name="PRIMARY">
+    <key id="311" parent="288" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>task_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="311" parent="288" name="fk_task">
+    <foreign-key id="312" parent="288" name="fk_task">
       <ColNames>person_id</ColNames>
       <RefTableName>person</RefTableName>
       <RefColNames>id</RefColNames>
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <column id="312" parent="289" name="task_id">
+    <column id="313" parent="289" name="task_id">
       <Position>1</Position>
       <DataType>bigint|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="313" parent="289" name="attach_id">
+    <column id="314" parent="289" name="attach_id">
       <Position>2</Position>
       <DataType>bigint|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="314" parent="289" name="attach_id">
+    <index id="315" parent="289" name="attach_id">
       <ColNames>attach_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="315" parent="289" name="PRIMARY">
+    <key id="316" parent="289" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>task_id
 attach_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="316" parent="289" name="task_attach_ibfk_1">
+    <foreign-key id="317" parent="289" name="task_attach_ibfk_1">
       <ColNames>task_id</ColNames>
       <RefTableName>task</RefTableName>
       <RefColNames>task_id</RefColNames>
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <foreign-key id="317" parent="289" name="task_attach_ibfk_2">
+    <foreign-key id="318" parent="289" name="task_attach_ibfk_2">
       <ColNames>attach_id</ColNames>
       <RefTableName>attachment</RefTableName>
       <RefColNames>id</RefColNames>
