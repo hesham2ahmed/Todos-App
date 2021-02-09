@@ -16,7 +16,7 @@ public class Person {
         this.first_name = first_name;
         this.last_name = last_name;
         this.password = password;
-        this.tasks = new ArrayList<>();
+        this.tasks = null;
     }
 
     public long getId() {

@@ -12,6 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class PasswordAuthentication {
+
+    private static PasswordAuthentication ins = null;
     /**
      * Each token produced by this class uses this identifier as a prefix.
      */
@@ -32,9 +34,15 @@ public final class PasswordAuthentication {
 
     private final int cost;
 
-    public PasswordAuthentication()
+    private PasswordAuthentication()
     {
         this(DEFAULT_COST);
+    }
+
+    public static PasswordAuthentication createIns(){
+        if (ins == null)
+            ins = new PasswordAuthentication();
+        return ins;
     }
 
     /**

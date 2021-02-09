@@ -10,18 +10,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDAO implements ITaskDAO {
-    private static TaskDAO inst = null;
-    private final Connection connection;
+
 
     private final String INSERT_TASK_SQL = "INSERT INTO " + table + " (person_id, task_note, task_name, created_date, due_date, is_done) " + "values(?, ?, ?, ?, ?, ?);";
     private final String SELECT_TASK_BY_ID_SQL = "SELECT person_id, task_note, task_name, created_date, due_date FROM " + table + " WHERE task_id = ?;";
     private final String UPDATE_TASK_SQL = "UPDATE task set task_note = ?, task_name = ?, due_date = ? WHERE task_id = ?;";
     private final String DELETE_TASK_SQL = "DELETE FROM person WHERE id = ?;";
-    private final String SELECT_ALL_TASKS = "SELECT * FROM person;";
+    private final String SELECT_ALL_TASKS_SQL = "SELECT * FROM person;";
     private final String SELECT_PERSON_TASKS = "SELECT * FROM task where person_id = ?";
 
-    private TaskDAO(Connection connection){this.connection = connection; }
+    private static TaskDAO inst = null;
+    private final Connection connection;
+    private PreparedStatement preparedStatement;
 
+    /**
+     * Constructor
+     * @param connection
+     * Single-tone
+     */
+    private TaskDAO(Connection connection){this.connection = connection; }
     public static TaskDAO createIns(Connection connection){
         if(inst == null)
             inst = new TaskDAO(connection);
@@ -33,7 +40,7 @@ public class TaskDAO implements ITaskDAO {
         Task task = (Task) object;
         boolean added = false;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_TASK_SQL);
+            preparedStatement = connection.prepareStatement(INSERT_TASK_SQL);
             preparedStatement.setLong(1, task.getPerson_id());
             preparedStatement.setString(2, task.getNote());
             preparedStatement.setString(3, task.getName());
@@ -51,7 +58,7 @@ public class TaskDAO implements ITaskDAO {
     public Task read(long id) {
         Task task = null;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TASK_BY_ID_SQL);
+            preparedStatement = connection.prepareStatement(SELECT_TASK_BY_ID_SQL);
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -75,7 +82,7 @@ public class TaskDAO implements ITaskDAO {
         boolean updated = false;
         Task task = (Task) object;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TASK_SQL);
+            preparedStatement = connection.prepareStatement(UPDATE_TASK_SQL);
             preparedStatement.setString(1, task.getNote());
             preparedStatement.setString(2, task.getName());
             preparedStatement.setDate(3, (Date) task.getDue_date());
@@ -88,23 +95,10 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public boolean delete(long id) {
-        boolean deleted = false;
+    public List<Task> getAll() {
+        List<Task> tasks = null;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_TASK_SQL);
-            preparedStatement.setLong(1, id);
-            deleted = preparedStatement.executeUpdate() > 0;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return deleted;
-    }
-
-    @Override
-    public List<Task> getAllTasks() {
-        List<Task>  tasks = new ArrayList<>();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_TASKS);
+            preparedStatement = connection.prepareStatement(SELECT_ALL_TASKS_SQL);
             ResultSet rs = preparedStatement.executeQuery();
             tasks = getResultList(rs);
         } catch (SQLException throwables) {
@@ -114,10 +108,23 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public List<Task> getPersonTasks(long personId) {
-        List<Task> tasks = new ArrayList<>();
+    public boolean delete(long id) {
+        boolean deleted = false;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_PERSON_TASKS);
+            preparedStatement = connection.prepareStatement(DELETE_TASK_SQL);
+            preparedStatement.setLong(1, id);
+            deleted = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return deleted;
+    }
+
+    @Override
+    public List<Task> getPersonTasks(long personId) {
+        List<Task> tasks = null;
+        try {
+            preparedStatement = connection.prepareStatement(SELECT_PERSON_TASKS);
             preparedStatement.setLong(1, personId);
             ResultSet rs = preparedStatement.executeQuery();
             tasks = getResultList(rs);

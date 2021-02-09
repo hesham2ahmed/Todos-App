@@ -4,8 +4,7 @@ import com.todos.api.model.Attachment;
 
 import java.util.List;
 
-public interface IAttachmentDAO{
+public interface IAttachmentDAO extends CRUD {
     String table = "attachment";
-    List<Attachment> getAllAttachment();
     List<Attachment> getTaskAttachments(long taskId);
 }
