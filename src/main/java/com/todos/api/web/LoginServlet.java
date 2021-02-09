@@ -15,21 +15,6 @@ import java.sql.Connection;
 public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession httpSession = request.getSession(false);
-        Connection connection = (Connection) request.getServletContext().getAttribute("dbConnection");
-        PasswordAuthentication passAuth = (PasswordAuthentication) request.getServletContext().getAttribute("passAuth");
-
-        if(httpSession == null){
-            String email = request.getParameter("email");
-            String pass = request.getParameter("pass");
-            try {
-
-            }catch (Exception exception){
-
-            }
-        }else {
-
-        }
 
     }
 
