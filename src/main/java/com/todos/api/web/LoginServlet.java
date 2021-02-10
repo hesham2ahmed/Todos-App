@@ -1,8 +1,8 @@
 package com.todos.api.web;
 
 import com.todos.api.dao.impl.PersonDAO;
-import com.todos.api.model.Person;
 import com.todos.api.service.PersonService;
+import com.todos.api.utility.JsonResponse;
 import com.todos.api.utility.PassAuth;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,19 +25,23 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Connection connection = (Connection) request.getServletContext().getAttribute("dbConnection");
         PersonService personService = new PersonService(PersonDAO.createIns(connection), PassAuth.createIns());
+        HttpSession session = null;
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         boolean loggedIn = false;
         try {
             JSONObject jsonObject = personService.logIn(email, password);
             if(jsonObject != null) {
-                HttpSession session = setSession(jsonObject, request);
+                session = setSession(jsonObject, request);
                 loggedIn = true;
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        response.getWriter().println(loggedIn);
+        if(loggedIn)
+            response.getWriter().println(JsonResponse.createResponse(200, "ok"));
+        else
+            response.getWriter().println(JsonResponse.createResponse(404, "not found"));
     }
 
     private HttpSession setSession(JSONObject jsonObject, HttpServletRequest request) throws JSONException {

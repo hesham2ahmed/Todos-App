@@ -2,6 +2,7 @@ package com.todos.api.web;
 
 import com.todos.api.dao.impl.PersonDAO;
 import com.todos.api.service.PersonService;
+import com.todos.api.utility.JsonResponse;
 import com.todos.api.utility.PassAuth;
 import org.json.JSONException;
 
@@ -11,7 +12,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.sql.Connection;
 
-@WebServlet(name = "SignUp", value = "/SignUp")
+@WebServlet(name = "SignUp", value = "/signup")
 public class SignUpServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,6 +30,10 @@ public class SignUpServlet extends HttpServlet {
         String last_name = request.getParameter("last_name");
         boolean signed_up = false;
         signed_up = personService.signUp(email, first_name, last_name, password);
-        response.getWriter().println(signed_up);
+
+        if(signed_up)
+            response.getWriter().println(JsonResponse.createResponse(200, "ok"));
+        else
+            response.getWriter().println(JsonResponse.createResponse(400,"bad request"));
     }
 }
