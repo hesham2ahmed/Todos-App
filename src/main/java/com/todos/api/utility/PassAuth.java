@@ -11,9 +11,9 @@ import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class PasswordAuthentication {
+public final class PassAuth {
 
-    private static PasswordAuthentication ins = null;
+    private static PassAuth ins = null;
     /**
      * Each token produced by this class uses this identifier as a prefix.
      */
@@ -34,14 +34,14 @@ public final class PasswordAuthentication {
 
     private final int cost;
 
-    private PasswordAuthentication()
+    private PassAuth()
     {
         this(DEFAULT_COST);
     }
 
-    public static PasswordAuthentication createIns(){
+    public static PassAuth createIns(){
         if (ins == null)
-            ins = new PasswordAuthentication();
+            ins = new PassAuth();
         return ins;
     }
 
@@ -50,7 +50,7 @@ public final class PasswordAuthentication {
      *
      * @param cost the exponential computational cost of hashing a password, 0 to 30
      */
-    public PasswordAuthentication(int cost)
+    public PassAuth(int cost)
     {
         iterations(cost); /* Validate cost */
         this.cost = cost;

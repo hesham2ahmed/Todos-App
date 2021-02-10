@@ -1,10 +1,9 @@
 package com.todos.api.listener;
 
 import com.todos.api.utility.ConnectionManager;
-import com.todos.api.utility.PasswordAuthentication;
+import com.todos.api.utility.PassAuth;
 
 import javax.servlet.*;
-import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -21,10 +20,10 @@ public class AppContextListener implements ServletContextListener {
         String dbDriver = ctx.getInitParameter("dbDriver");
 
         try {
-            PasswordAuthentication passwordAuthentication = PasswordAuthentication.createIns();
+            PassAuth passAuth = PassAuth.createIns();
             ConnectionManager connectionManager = ConnectionManager.createConnectionManager(dbURL, user, pwd, dbDriver);
             ctx.setAttribute("dbConnection", connectionManager.getConnection());
-            ctx.setAttribute("passAuth", passwordAuthentication);
+            ctx.setAttribute("passAuth", passAuth);
 
             System.out.println("DB Connection initialized successfully.");
         } catch (SQLException throwables) {

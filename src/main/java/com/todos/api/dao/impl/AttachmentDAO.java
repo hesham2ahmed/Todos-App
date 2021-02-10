@@ -38,7 +38,6 @@ public class AttachmentDAO implements IAttachmentDAO {
         return attachmentDAO;
     }
 
-
     @Override
     public <T> boolean insert(T object) {
         boolean Added = false;

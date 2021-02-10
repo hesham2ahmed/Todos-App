@@ -1,5 +1,8 @@
 package com.todos.api.dao;
 
-public interface IPersonDAO extends CRUD {
+import com.todos.api.model.Person;
+
+public interface IPersonDAO extends IDatabase {
     String table = "person";
+    Person read(String email);
 }
