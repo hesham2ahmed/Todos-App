@@ -26,8 +26,8 @@ public class LoginServlet extends HttpServlet {
         Connection connection = (Connection) request.getServletContext().getAttribute("dbConnection");
         PersonService personService = new PersonService(PersonDAO.createIns(connection), PassAuth.createIns());
         HttpSession session = null;
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String email = (String) request.getAttribute("email");
+        String password = (String) request.getAttribute("password");
         boolean loggedIn = false;
         try {
             JSONObject jsonObject = personService.logIn(email, password);

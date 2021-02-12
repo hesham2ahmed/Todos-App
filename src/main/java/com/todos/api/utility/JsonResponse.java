@@ -8,7 +8,7 @@ public class JsonResponse {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("status", status);
-            jsonObject.put("response", response);
+            jsonObject.put("message", response);
         } catch (JSONException e) {
             e.printStackTrace();
         }

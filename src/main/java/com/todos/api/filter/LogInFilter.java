@@ -1,11 +1,17 @@
 package com.todos.api.filter;
 
 import com.todos.api.utility.JsonResponse;
+import com.todos.api.utility.Util;
 import com.todos.api.utility.Validation;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.servlet.*;
 import javax.servlet.annotation.*;
+import javax.ws.rs.core.Request;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @WebFilter(filterName = "logInValidationFilter", urlPatterns = "/login")
 public class LogInFilter implements Filter {
@@ -17,11 +23,16 @@ public class LogInFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        if(Validation.isEmailValid(email) && Validation.isPasswordValid(password))
+        request = Util.readDataFromRequest(request);
+        String email = (String) request.getAttribute("email");
+        String password = (String) request.getAttribute("password");
+        if(email != null && password != null && Validation.isEmailValid(email) && Validation.isPasswordValid(password))
+        {
             chain.doFilter(request, response);
-        else
+        }
+        else {
             response.getWriter().println(JsonResponse.createResponse(400, "bad request"));
+        }
     }
+
 }
