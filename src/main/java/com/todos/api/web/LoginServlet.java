@@ -28,28 +28,33 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = null;
         String email = (String) request.getAttribute("email");
         String password = (String) request.getAttribute("password");
+        JSONObject jsonObject = null;
         boolean loggedIn = false;
+
         try {
-            JSONObject jsonObject = personService.logIn(email, password);
+            jsonObject = personService.logIn(email, password);
             if(jsonObject != null) {
                 session = setSession(jsonObject, request);
+                jsonObject.put("maxInteractiveTime", session.getMaxInactiveInterval());
+                System.out.println(session.getMaxInactiveInterval());
                 loggedIn = true;
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if(loggedIn)
-            response.getWriter().println(JsonResponse.createResponse(200, "ok"));
+        if(loggedIn) {
+            response.getWriter().println(JsonResponse.createResponse(200, "ok", jsonObject));
+        }
         else
-            response.getWriter().println(JsonResponse.createResponse(404, "not found"));
+            response.getWriter().println(JsonResponse.createResponse(404, "wrong email or password", null));
     }
 
     private HttpSession setSession(JSONObject jsonObject, HttpServletRequest request) throws JSONException {
         HttpSession session = request.getSession();
         session.setAttribute("person_id", jsonObject.get("person_id"));
         session.setAttribute("person_email", jsonObject.get("person_email"));
-        session.setAttribute("person_first_name", jsonObject.get("person_first_name"));
-        session.setAttribute("person_last_name", jsonObject.get("person_last_name"));
+        session.setAttribute("person_first_name", jsonObject.get("person_firstname"));
+        session.setAttribute("person_last_name", jsonObject.get("person_lastname"));
         return session;
     }
 

@@ -38,8 +38,8 @@ public final class RegistrationService {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("person_id", person.getId());
         jsonObject.put("person_email", person.getEmail());
-        jsonObject.put("person_first_name", person.getFirst_name());
-        jsonObject.put("person_last_name", person.getLast_name());
+        jsonObject.put("person_firstname", person.getFirst_name());
+        jsonObject.put("person_lastname", person.getLast_name());
         return jsonObject;
     }
 }

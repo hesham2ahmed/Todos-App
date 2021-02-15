@@ -24,14 +24,14 @@ public class LogInFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         request = Util.readDataFromRequest(request);
-        String email = (String) request.getAttribute("email");
+        String email = ((String) request.getAttribute("email")).toLowerCase();
         String password = (String) request.getAttribute("password");
-        if(email != null && password != null && Validation.isEmailValid(email) && Validation.isPasswordValid(password))
+        if(Validation.isEmailValid(email) && Validation.isPasswordValid(password))
         {
             chain.doFilter(request, response);
         }
         else {
-            response.getWriter().println(JsonResponse.createResponse(400, "bad request"));
+            response.getWriter().println(JsonResponse.createResponse(400, "validation Error", null));
         }
     }
 

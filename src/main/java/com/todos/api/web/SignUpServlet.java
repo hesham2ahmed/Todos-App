@@ -24,16 +24,16 @@ public class SignUpServlet extends HttpServlet {
     {
         Connection connection = (Connection) request.getServletContext().getAttribute("dbConnection");
         PersonService personService = new PersonService(PersonDAO.createIns(connection), PassAuth.createIns());
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String first_name = request.getParameter("first_name");
-        String last_name = request.getParameter("last_name");
+        String email = (String) request.getAttribute("email");
+        String password = (String) request.getAttribute("password");
+        String first_name = (String) request.getAttribute("firstname");
+        String last_name = (String) request.getAttribute("lastname");
         boolean signed_up = false;
         signed_up = personService.signUp(email, first_name, last_name, password);
 
         if(signed_up)
-            response.getWriter().println(JsonResponse.createResponse(200, "ok"));
+            response.getWriter().println(JsonResponse.createResponse(200, "ok", null));
         else
-            response.getWriter().println(JsonResponse.createResponse(400,"bad request"));
+            response.getWriter().println(JsonResponse.createResponse(400,"email is already exist", null));
     }
 }

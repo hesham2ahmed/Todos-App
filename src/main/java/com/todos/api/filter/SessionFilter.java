@@ -22,20 +22,22 @@ public class SessionFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpSession session = httpServletRequest.getSession(false);
         String url = httpServletRequest.getServletPath().toString();
+
         if(url.equals("/login")
                 || url.equals("/signup")
                 || url.equals("/welcome")
-                ||url.equals("/todos"))
+                ||url.equals("/todos")
+                ||url.equals("/logout"))
         {
             if(session == null){
                 if(url.equals("/todos"))
-                    response.getWriter().println(JsonResponse.createResponse(405, "method not allowed"));
+                    response.getWriter().println(JsonResponse.createResponse(405, "method not allowed", null));
                 else
                     chain.doFilter(request, response);
             }
             else{
                 if(url.equals("/login") || url.equals("/signup")){
-                    response.getWriter().println(JsonResponse.createResponse(405, "method not allowed"));
+                    response.getWriter().println(JsonResponse.createResponse(405, "method not allowed", null));
                 }
                 else {
                     chain.doFilter(request, response);
@@ -43,6 +45,6 @@ public class SessionFilter implements Filter {
             }
         }
         else
-            response.getWriter().println(JsonResponse.createResponse(404, "not found"));
+            response.getWriter().println(JsonResponse.createResponse(404, "not found", null));
     }
 }
