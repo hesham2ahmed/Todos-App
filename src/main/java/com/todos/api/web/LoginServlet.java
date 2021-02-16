@@ -35,8 +35,7 @@ public class LoginServlet extends HttpServlet {
             jsonObject = personService.logIn(email, password);
             if(jsonObject != null) {
                 session = setSession(jsonObject, request);
-                jsonObject.put("maxInteractiveTime", session.getMaxInactiveInterval());
-                System.out.println(session.getMaxInactiveInterval());
+                jsonObject.put("expireDate", session.getLastAccessedTime() + (session.getMaxInactiveInterval() * 1000));
                 loggedIn = true;
             }
         } catch (JSONException e) {
