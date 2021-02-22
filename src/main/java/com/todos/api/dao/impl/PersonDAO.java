@@ -35,22 +35,26 @@ public class PersonDAO implements IPersonDAO {
     }
 
     @Override
-    public <T> boolean insert(T object) {
+    public <T> long insert(T object) {
         Person person = (Person) object;
-        boolean inserted = false;
+        long id = -1;
         try {
 
-            preparedStatement = connection.prepareStatement(INSERT_PERSON_SQL);
+            preparedStatement = connection.prepareStatement(INSERT_PERSON_SQL, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, person.getFirst_name());
             preparedStatement.setString(2, person.getLast_name());
             preparedStatement.setString(3, person.getEmail());
             preparedStatement.setString(4, person.getPassword());
-            inserted = preparedStatement.executeUpdate() > 0;
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            while(resultSet.next()){
+                id = resultSet.getLong(1);
+            }
 
         } catch (SQLException throwables) {
             ExceptionHandle.printSQLException(throwables);
         }
-        return inserted;
+        return id;
     }
 
     @Override

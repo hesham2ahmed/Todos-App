@@ -13,12 +13,12 @@ public class Task {
     private List<Attachment> attachments;
     private long person_id;
 
-    public Task(long person_id,String note, String name, Date created_date, Date due_date) {
+    public Task(long person_id,String note, String name, Date created_date, Date due_date, boolean done) {
         this.note = note;
         this.name = name;
         this.created_date = created_date;
         this.due_date = due_date;
-        this.done = false;
+        this.done = done;
         this.person_id = person_id;
     }
 

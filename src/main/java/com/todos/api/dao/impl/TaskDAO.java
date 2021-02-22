@@ -36,22 +36,26 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public <T> boolean insert(T object) {
+    public <T> long insert(T object) {
         Task task = (Task) object;
-        boolean added = false;
+        long id = -1;
         try {
-            preparedStatement = connection.prepareStatement(INSERT_TASK_SQL);
+            preparedStatement = connection.prepareStatement(INSERT_TASK_SQL, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setLong(1, task.getPerson_id());
             preparedStatement.setString(2, task.getNote());
             preparedStatement.setString(3, task.getName());
             preparedStatement.setDate(4, (Date) task.getCreated_date());
             preparedStatement.setDate(5, (Date) task.getDue_date());
             preparedStatement.setBoolean(6, task.isDone());
-            added = preparedStatement.executeUpdate() > 0;
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            while (resultSet.next()){
+                id = resultSet.getLong(1);
+            }
         } catch (SQLException throwables) {
             ExceptionHandle.printSQLException(throwables);
         }
-        return  added;
+        return id;
     }
 
     @Override
@@ -67,8 +71,8 @@ public class TaskDAO implements ITaskDAO {
                         resultSet.getString("task_note"),
                         resultSet.getString("task_name"),
                         resultSet.getDate("created_date"),
-                        resultSet.getDate("due_date"));
-                task.setDone(resultSet.getBoolean("is_done"));
+                        resultSet.getDate("due_date"),
+                        resultSet.getBoolean("is_done"));
                 task.setId(resultSet.getLong("task_id"));
             }
         } catch (SQLException throwables) {
@@ -144,9 +148,8 @@ public class TaskDAO implements ITaskDAO {
             Date created_date = rs.getDate("created_date");
             Date due_date = rs.getDate("due_date");
             boolean is_done = rs.getBoolean("is_done");
-            Task task = new Task(person_id, task_note, task_name, created_date, due_date);
+            Task task = new Task(person_id, task_note, task_name, created_date, due_date, is_done);
             task.setId(task_id);
-            task.setDone(is_done);
             tasks.add(task);
         }
         return tasks;

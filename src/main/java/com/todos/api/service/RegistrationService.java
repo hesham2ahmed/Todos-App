@@ -15,7 +15,7 @@ public final class RegistrationService {
         this.passAuth = passAuth;
     }
 
-    public boolean signUp(String email, String first_name, String last_name, String pass)
+    public long signUp(String email, String first_name, String last_name, String pass)
     {
         return personDAO.insert(new Person(email, first_name, last_name, passAuth.hash(pass.toCharArray())));
     }

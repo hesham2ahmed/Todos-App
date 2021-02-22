@@ -39,17 +39,21 @@ public class AttachmentDAO implements IAttachmentDAO {
     }
 
     @Override
-    public <T> boolean insert(T object) {
-        boolean Added = false;
+    public <T> long insert(T object) {
+        long id = -1;
         Attachment attachment = (Attachment) object;
         try {
             preparedStatement = connection.prepareStatement(INSERT_ATTACHMENT_SQL);
             preparedStatement.setString(1, attachment.getLink());
-            Added = preparedStatement.executeUpdate() > 0;
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            while (resultSet.next()){
+                id = resultSet.getLong(1);
+            }
         } catch (SQLException throwables) {
             ExceptionHandle.printSQLException(throwables);
         }
-        return  Added;
+        return id;
     }
 
     @Override

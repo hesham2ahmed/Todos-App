@@ -23,7 +23,7 @@ public class SignUpServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         Connection connection = (Connection) request.getServletContext().getAttribute("dbConnection");
-        PersonService personService = new PersonService(PersonDAO.createIns(connection), PassAuth.createIns());
+        PersonService personService = new PersonService(connection);
         String email = (String) request.getAttribute("email");
         String password = (String) request.getAttribute("password");
         String first_name = (String) request.getAttribute("firstname");
