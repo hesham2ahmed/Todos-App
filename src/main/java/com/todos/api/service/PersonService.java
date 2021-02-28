@@ -55,4 +55,9 @@ public class PersonService {
     public long addTask(Task task){
         return taskDAO.insert(task);
     }
+
+    public boolean deleteTask(long id){
+        return taskDAO.delete(id);
+    }
+
 }

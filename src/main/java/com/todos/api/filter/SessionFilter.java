@@ -26,8 +26,9 @@ public class SessionFilter implements Filter {
         if(url.equals("/login")
                 || url.equals("/signup")
                 || url.equals("/welcome")
-                ||url.equals("/todos")
-                ||url.equals("/logout"))
+                || url.equals("/todos")
+                || url.equals("/logout")
+                || url.equals("/deletetodo"))
         {
             if(session == null){
                 if(url.equals("/todos"))

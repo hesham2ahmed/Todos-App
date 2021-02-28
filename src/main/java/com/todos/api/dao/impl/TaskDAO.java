@@ -15,7 +15,7 @@ public class TaskDAO implements ITaskDAO {
     private final String INSERT_TASK_SQL = "INSERT INTO " + table + " (person_id, task_note, task_name, created_date, due_date, is_done) " + "values(?, ?, ?, ?, ?, ?);";
     private final String SELECT_TASK_BY_ID_SQL = "SELECT person_id, task_note, task_name, created_date, due_date FROM " + table + " WHERE task_id = ?;";
     private final String UPDATE_TASK_SQL = "UPDATE task set task_note = ?, task_name = ?, due_date = ? WHERE task_id = ?;";
-    private final String DELETE_TASK_SQL = "DELETE FROM person WHERE id = ?;";
+    private final String DELETE_TASK_SQL = "DELETE FROM task WHERE task_id = ?;";
     private final String SELECT_ALL_TASKS_SQL = "SELECT * FROM person;";
     private final String SELECT_PERSON_TASKS = "SELECT * FROM task where person_id = ?";
 

@@ -1,10 +1,9 @@
 package com.todos.api.web;
 
-import com.todos.api.dao.impl.PersonDAO;
 import com.todos.api.model.Task;
 import com.todos.api.service.PersonService;
 import com.todos.api.utility.JsonResponse;
-import com.todos.api.utility.PassAuth;
+
 import com.todos.api.utility.Util;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,11 +15,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 import java.util.List;
 
 @WebServlet(name = "Todos", value = "/todos")
